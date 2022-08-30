@@ -5,17 +5,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.convert = void 0;
 
-var _express = _interopRequireDefault(require("express"));
-
-var _helpers = require("./helpers");
-
-var _templates = require("./templates");
-
-var _htmltoimage = require("./htmltoimage");
-
-var _libreofficeConvert = _interopRequireDefault(require("libreoffice-convert"));
+var _nodeHtmlToImage = _interopRequireDefault(require("node-html-to-image"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -25,39 +17,26 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-var path = require('path');
-
-var fs = require('fs').promises;
-
-_libreofficeConvert["default"].convertAsync = require('util').promisify(_libreofficeConvert["default"].convert);
-
-var router = _express["default"].Router();
-
-router.get('/', /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res, next) {
-    var ext, inputPath, outputPath, docxBuf, pdfBuf;
+var convert = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var name, image;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            ext = '.pdf';
-            inputPath = path.join(__dirname, '/server/routes/gayashan-poc.pptx');
-            outputPath = path.join(__dirname, "/server/routes/example".concat(ext)); // Read file
+            name = "gaya";
+            _context.next = 3;
+            return (0, _nodeHtmlToImage["default"])({
+              output: './image.png',
+              html: "<html>\n                <head>\n                    <style>\n                        body {\n                        width: 248px;\n                        height: 350px;\n                        }\n                    </style>\n                </head>\n                <body>\n                    <div>".concat(name, "</div>\n                    <table>\n                        <tr> <td>X</td> <td>X</td> <td>X</td> </tr>\n                        <tr> <td>X</td> <td>X</td> <td>X</td> </tr>\n                        <tr> <td>X</td> <td>X</td> <td>X</td> </tr>\n                    </table>\n                </body>\n                </html>") // selector: "div"
 
-            _context.next = 5;
-            return fs.readFile(inputPath);
+            });
+
+          case 3:
+            image = _context.sent;
+            return _context.abrupt("return", true);
 
           case 5:
-            docxBuf = _context.sent;
-            _context.next = 8;
-            return _libreofficeConvert["default"].convertAsync(docxBuf, ext, undefined);
-
-          case 8:
-            pdfBuf = _context.sent;
-            _context.next = 11;
-            return fs.writeFile(outputPath, pdfBuf);
-
-          case 11:
           case "end":
             return _context.stop();
         }
@@ -65,9 +44,9 @@ router.get('/', /*#__PURE__*/function () {
     }, _callee);
   }));
 
-  return function (_x, _x2, _x3) {
+  return function convert() {
     return _ref.apply(this, arguments);
   };
-}());
-var _default = router;
-exports["default"] = _default;
+}();
+
+exports.convert = convert;
